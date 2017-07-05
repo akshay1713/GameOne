@@ -7,6 +7,7 @@ import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
@@ -14,6 +15,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+
 import java.util.Iterator;
 
 
@@ -29,6 +31,11 @@ public class DropGame extends ApplicationAdapter {
 	private Vector3 touchPosition;
 	private Array<Rectangle> rainDrops;
 	private long lastDropTime;
+	private State state;
+	private BitmapFont scoreFont;
+	private int score;
+	private String scoreText;
+	private BitmapFont gameOverFont;
 
 	@Override
 	public void create () {
@@ -53,20 +60,48 @@ public class DropGame extends ApplicationAdapter {
 		bucket.height = 64;
 
 		touchPosition = new Vector3();
+		rainDrops = new Array<Rectangle>();
+		spawnRaindrop();
+		score = 0;
+		scoreText = "SCORE: " + score;
+		scoreFont = new BitmapFont();
+		state = State.RUN;
+		gameOverFont = new BitmapFont();
 	}
 
 	@Override
 	public void render () {
+		switch (state)
+		{
+			case RUN:
+			    update();
+				break;
+			case PAUSE:
+				break;
+			case RESUME:
+				break;
+			default:
+				break;
+		}
+	}
+
+	private void update () {
 		Gdx.gl.glClearColor(0, 0, 0.2f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 		camera.update();
 
-		rainDrops = new Array<Rectangle>();
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		batch.draw(bucketImage, bucket.x, bucket.y);
 		for(Rectangle raindrop: rainDrops) {
 			batch.draw(dropImage, raindrop.x, raindrop.y);
+		}
+		scoreFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+		scoreFont.draw(batch, scoreText, 25, 100);
+		if(state == State.STOPPED){
+			gameOverFont.setColor(1.0f, 1.0f, 1.0f, 1.0f);
+			gameOverFont.draw(batch, "Game Over", 400, 240);
+			rainMusic.stop();
 		}
 		batch.end();
 
@@ -83,25 +118,46 @@ public class DropGame extends ApplicationAdapter {
 		}
 
 		if(bucket.x < 0){
+			bucket.x = 800-64;
+		}
+		else if(bucket.x > 800 - 64){
 			bucket.x = 0;
 		}
-		if(bucket.x > 800 - 64){
-			bucket.x = 800 - 64;
-		}
-		spawnRaindrop();
+
 		if(TimeUtils.nanoTime() - lastDropTime > 1000000000){
 			spawnRaindrop();
 		}
+
 		Iterator<Rectangle> iter = rainDrops.iterator();
 		while(iter.hasNext()) {
 			Rectangle raindrop = iter.next();
 			raindrop.y -= 200 * Gdx.graphics.getDeltaTime();
-			if(raindrop.y + 64 < 0) iter.remove();
+			if(raindrop.y + 64 < 0) {
+				iter.remove();
+				state = State.STOPPED;
+				update();
+			}
 			if(raindrop.overlaps(bucket)) {
 				dropSound.play();
 				iter.remove();
+				updateScore();
 			}
 		}
+	}
+
+	private void updateScore() {
+		score++;
+		scoreText = "SCORE: " + score;
+	}
+
+	private void pauseResumeToggle() {
+	    if(state == State.PAUSE) {
+			state = State.RESUME;
+			rainMusic.play();
+			return;
+		}
+		state = State.PAUSE;
+	    rainMusic.pause();
 	}
 
 	private void spawnRaindrop() {
