@@ -190,5 +190,10 @@ public class DropGame extends ApplicationAdapter {
 
     @Override
     public void dispose () {
+        batch.dispose();
+        dropImage.dispose();
+        bucketImage.dispose();
+        dropSound.dispose();
+        rainMusic.dispose();
     }
 }
