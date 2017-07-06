@@ -46,6 +46,7 @@ public class DropGame extends ApplicationAdapter {
     private TextureAtlas textureAtlas;
     private Animation animation;
     private float elapsedTime;
+    private float xPos;
 
     @Override
     public void create () {
@@ -83,18 +84,21 @@ public class DropGame extends ApplicationAdapter {
 //        gameOverFont.setUseIntegerPositions(false);
         batch = new SpriteBatch();
         textureAtlas = new TextureAtlas(Gdx.files.internal("spritesheet.atlas"));
-        TextureAtlas.AtlasRegion region = textureAtlas.findRegion("0001");
-        sprite = new Sprite(region);
-        sprite.setPosition(300, 260);
-        sprite.setScale(2.5f);
+//        TextureAtlas.AtlasRegion region = textureAtlas.findRegion("0001");
+//        sprite = new Sprite(region);
+//        sprite.setPosition(300, 260);
+//        sprite.setScale(2.5f);
         animation = new Animation(1/100f, textureAtlas.getRegions());
-
+        xPos = 0;
     }
 
     @Override
     public void render () {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+//        sprite.translateX(-1f);
+        xPos++;
+        if(xPos == 800) xPos = 0;
 
         batch.begin();
         elapsedTime += Gdx.graphics.getDeltaTime();
@@ -102,7 +106,7 @@ public class DropGame extends ApplicationAdapter {
 
         TextureAtlas.AtlasRegion aa = (TextureAtlas.AtlasRegion)animation.getKeyFrame(elapsedTime, true);
         elapsedTime += Gdx.graphics.getDeltaTime();
-        batch.draw(aa, 0,0);
+        batch.draw(aa, xPos,0);
         batch.end();
 //        switch (state)
 //        {
