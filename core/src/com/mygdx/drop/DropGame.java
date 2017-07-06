@@ -8,14 +8,17 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.BitmapFont;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.utils.Timer;
+import com.badlogic.gdx.utils.Timer.Task;
 
 import java.util.Iterator;
 
@@ -38,57 +41,86 @@ public class DropGame extends ApplicationAdapter {
     private String scoreText;
     private BitmapFont gameOverFont;
     private static final String fontCharacters = "GAMEOVER";
+    private Texture texture;
+    private Sprite sprite;
+    private int currentFrame;
+    private String currentAtlasKey;
+    private TextureAtlas textureAtlas;
 
     @Override
     public void create () {
-        dropImage = new Texture(Gdx.files.internal("droplet.png"));
-        bucketImage = new Texture(Gdx.files.internal("bucket.png"));
-
-        dropSound = Gdx.audio.newSound(Gdx.files.internal("water_drop.wav"));
-
-        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
-        rainMusic.setLooping(true);
-        rainMusic.play();
-
-        camera = new OrthographicCamera();
-        camera.setToOrtho(false, 800, 480);
-
+//        dropImage = new Texture(Gdx.files.internal("droplet.png"));
+//        bucketImage = new Texture(Gdx.files.internal("bucket.png"));
+//
+//        dropSound = Gdx.audio.newSound(Gdx.files.internal("water_drop.wav"));
+//
+//        rainMusic = Gdx.audio.newMusic(Gdx.files.internal("rain.mp3"));
+//        rainMusic.setLooping(true);
+//        rainMusic.play();
+//
+//        camera = new OrthographicCamera();
+//        camera.setToOrtho(false, 800, 480);
+//
+//        batch = new SpriteBatch();
+//
+//        bucket = new Rectangle();
+//        bucket.x = 800 / 2 - 64 / 2;
+//        bucket.y = 20;
+//        bucket.width = 64;
+//        bucket.height = 64;
+//
+//        touchPosition = new Vector3();
+//        rainDrops = new Array<Rectangle>();
+//        spawnRaindrop();
+//        score = 0;
+//        scoreText = "SCORE: " + score;
+//        scoreFont = new BitmapFont();
+//        state = State.RUN;
+//        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("OpenSans-Bold.ttf"));
+//        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
+//        parameter.size = 32;
+//        gameOverFont = generator.generateFont(parameter);
+//        gameOverFont.setUseIntegerPositions(false);
         batch = new SpriteBatch();
+        textureAtlas = new TextureAtlas(Gdx.files.internal("spritesheet.atlas"));
+        TextureAtlas.AtlasRegion region = textureAtlas.findRegion("0001");
+        sprite = new Sprite(region);
+        sprite.setPosition(300, 260);
+        sprite.setScale(2.5f);
+        Timer.schedule(new Task(){
+                           @Override
+                           public void run() {
+                               currentFrame++;
+                               if(currentFrame > 20)
+                                   currentFrame = 1;
 
-        bucket = new Rectangle();
-        bucket.x = 800 / 2 - 64 / 2;
-        bucket.y = 20;
-        bucket.width = 64;
-        bucket.height = 64;
-
-        touchPosition = new Vector3();
-        rainDrops = new Array<Rectangle>();
-        spawnRaindrop();
-        score = 0;
-        scoreText = "SCORE: " + score;
-        scoreFont = new BitmapFont();
-        state = State.RUN;
-        FreeTypeFontGenerator generator = new FreeTypeFontGenerator(Gdx.files.internal("OpenSans-Bold.ttf"));
-        FreeTypeFontGenerator.FreeTypeFontParameter parameter = new FreeTypeFontGenerator.FreeTypeFontParameter();
-        parameter.size = 32;
-        gameOverFont = generator.generateFont(parameter);
-        gameOverFont.setUseIntegerPositions(false);
+                               currentAtlasKey = String.format("%04d", currentFrame);
+                               sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
+                           }
+                       }
+                ,0,1/30.0f);
     }
 
     @Override
     public void render () {
-        switch (state)
-        {
-            case RUN:
-                update();
-                break;
-            case PAUSE:
-                break;
-            case RESUME:
-                break;
-            default:
-                break;
-        }
+        Gdx.gl.glClearColor(1, 1, 1, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+
+        batch.begin();
+        sprite.draw(batch);
+        batch.end();
+//        switch (state)
+//        {
+//            case RUN:
+//                update();
+//                break;
+//            case PAUSE:
+//                break;
+//            case RESUME:
+//                break;
+//            default:
+//                break;
+//        }
     }
 
     private void update () {
