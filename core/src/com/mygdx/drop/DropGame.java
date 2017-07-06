@@ -1,16 +1,14 @@
 package com.mygdx.drop;
 
 import com.badlogic.gdx.ApplicationAdapter;
+import com.badlogic.gdx.ApplicationListener;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.BitmapFont;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
@@ -46,6 +44,8 @@ public class DropGame extends ApplicationAdapter {
     private int currentFrame;
     private String currentAtlasKey;
     private TextureAtlas textureAtlas;
+    private Animation animation;
+    private float elapsedTime;
 
     @Override
     public void create () {
@@ -87,18 +87,8 @@ public class DropGame extends ApplicationAdapter {
         sprite = new Sprite(region);
         sprite.setPosition(300, 260);
         sprite.setScale(2.5f);
-        Timer.schedule(new Task(){
-                           @Override
-                           public void run() {
-                               currentFrame++;
-                               if(currentFrame > 20)
-                                   currentFrame = 1;
+        animation = new Animation(1/100f, textureAtlas.getRegions());
 
-                               currentAtlasKey = String.format("%04d", currentFrame);
-                               sprite.setRegion(textureAtlas.findRegion(currentAtlasKey));
-                           }
-                       }
-                ,0,1/30.0f);
     }
 
     @Override
@@ -107,7 +97,12 @@ public class DropGame extends ApplicationAdapter {
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
 
         batch.begin();
-        sprite.draw(batch);
+        elapsedTime += Gdx.graphics.getDeltaTime();
+
+
+        TextureAtlas.AtlasRegion aa = (TextureAtlas.AtlasRegion)animation.getKeyFrame(elapsedTime, true);
+        elapsedTime += Gdx.graphics.getDeltaTime();
+        batch.draw(aa, 0,0);
         batch.end();
 //        switch (state)
 //        {
@@ -223,9 +218,9 @@ public class DropGame extends ApplicationAdapter {
     @Override
     public void dispose () {
         batch.dispose();
-        dropImage.dispose();
-        bucketImage.dispose();
-        dropSound.dispose();
-        rainMusic.dispose();
+//        dropImage.dispose();
+//        bucketImage.dispose();
+//        dropSound.dispose();
+//        rainMusic.dispose();
     }
 }
