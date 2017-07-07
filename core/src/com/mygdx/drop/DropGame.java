@@ -1,8 +1,6 @@
 package com.mygdx.drop;
 
-import com.badlogic.gdx.ApplicationAdapter;
-import com.badlogic.gdx.ApplicationListener;
-import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.*;
 import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.GL20;
@@ -12,16 +10,16 @@ import com.badlogic.gdx.graphics.g2d.*;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector3;
-import com.badlogic.gdx.Input;
 import com.badlogic.gdx.utils.Array;
 import com.badlogic.gdx.utils.TimeUtils;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.utils.Timer;
 import com.badlogic.gdx.utils.Timer.Task;
 
 import java.util.Iterator;
 
 
-public class DropGame extends ApplicationAdapter {
+public class DropGame extends ApplicationAdapter implements InputProcessor {
     private SpriteBatch batch;
     private Texture img;
     private Texture dropImage;
@@ -84,29 +82,37 @@ public class DropGame extends ApplicationAdapter {
 //        gameOverFont.setUseIntegerPositions(false);
         batch = new SpriteBatch();
         textureAtlas = new TextureAtlas(Gdx.files.internal("spritesheet.atlas"));
-//        TextureAtlas.AtlasRegion region = textureAtlas.findRegion("0001");
-//        sprite = new Sprite(region);
-//        sprite.setPosition(300, 260);
-//        sprite.setScale(2.5f);
-        animation = new Animation(1/100f, textureAtlas.getRegions());
-        xPos = 0;
+        TextureAtlas.AtlasRegion region = textureAtlas.findRegion("0001");
+        sprite = new Sprite(region);
+        sprite.setPosition(300, 260);
+        sprite.setScale(2.5f);
+        Gdx.input.setInputProcessor(this);
+
+//        animation = new Animation(1/100f, textureAtlas.getRegions());
+//        xPos = 0;
     }
 
     @Override
     public void render () {
         Gdx.gl.glClearColor(1, 1, 1, 1);
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-//        sprite.translateX(-1f);
-        xPos++;
-        if(xPos == 800) xPos = 0;
+//        if(Gdx.input.isKeyPressed(Input.Keys.RIGHT)) {
+//            sprite.translateX(1f);
+//        } else if (Gdx.input.isKeyPressed(Input.Keys.LEFT)) {
+//            sprite.translateX(-1f);
+//        }
+//        xPos++;
+//        if(xPos == 800) xPos = 0;
+        sprite.translateX(xPos);
 
         batch.begin();
-        elapsedTime += Gdx.graphics.getDeltaTime();
+//        elapsedTime += Gdx.graphics.getDeltaTime();
 
 
-        TextureAtlas.AtlasRegion aa = (TextureAtlas.AtlasRegion)animation.getKeyFrame(elapsedTime, true);
-        elapsedTime += Gdx.graphics.getDeltaTime();
-        batch.draw(aa, xPos,0);
+//        TextureAtlas.AtlasRegion aa = (TextureAtlas.AtlasRegion)animation.getKeyFrame(elapsedTime, true);
+//        elapsedTime += Gdx.graphics.getDeltaTime();
+//        batch.draw(aa, xPos,0);
+        sprite.draw(batch);
         batch.end();
 //        switch (state)
 //        {
@@ -120,6 +126,55 @@ public class DropGame extends ApplicationAdapter {
 //            default:
 //                break;
 //        }
+    }
+
+
+    @Override
+    public boolean keyDown(int keycode) {
+        float moveAmount = 1.0f;
+        if(Gdx.input.isKeyPressed(Keys.SPACE))
+            moveAmount = 10.0f;
+
+        if(keycode == Keys.LEFT)
+            xPos-=moveAmount;
+        if(keycode == Keys.RIGHT)
+            xPos+=moveAmount;
+        return true;
+    }
+
+    @Override
+    public boolean keyUp(int keycode) {
+        return false;
+    }
+
+    @Override
+    public boolean keyTyped(char character) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDown(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchUp(int screenX, int screenY, int pointer, int button) {
+        return false;
+    }
+
+    @Override
+    public boolean touchDragged(int screenX, int screenY, int pointer) {
+        return false;
+    }
+
+    @Override
+    public boolean mouseMoved(int screenX, int screenY) {
+        return false;
+    }
+
+    @Override
+    public boolean scrolled(int amount) {
+        return false;
     }
 
     private void update () {
