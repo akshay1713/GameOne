@@ -1,0 +1,160 @@
+
+tanksprite.png
+size: 512,256
+format: RGBA8888
+filter: Nearest,Nearest
+repeat: none
+barrelBeige
+  rotate: false
+  xy: 182, 10
+  size: 16, 50
+  orig: 16, 50
+  offset: 0, 0
+  index: -1
+barrelBeige_outline
+  rotate: false
+  xy: 471, 74
+  size: 24, 58
+  orig: 24, 58
+  offset: 0, 0
+  index: -1
+barrelBlack
+  rotate: false
+  xy: 200, 10
+  size: 16, 50
+  orig: 16, 50
+  offset: 0, 0
+  index: -1
+barrelBlack_outline
+  rotate: false
+  xy: 78, 2
+  size: 24, 58
+  orig: 24, 58
+  offset: 0, 0
+  index: -1
+barrelBlue
+  rotate: false
+  xy: 218, 10
+  size: 16, 50
+  orig: 16, 50
+  offset: 0, 0
+  index: -1
+barrelBlue_outline
+  rotate: false
+  xy: 104, 2
+  size: 24, 58
+  orig: 24, 58
+  offset: 0, 0
+  index: -1
+barrelGreen
+  rotate: false
+  xy: 236, 10
+  size: 16, 50
+  orig: 16, 50
+  offset: 0, 0
+  index: -1
+barrelGreen_outline
+  rotate: false
+  xy: 130, 2
+  size: 24, 58
+  orig: 24, 58
+  offset: 0, 0
+  index: -1
+barrelRed
+  rotate: false
+  xy: 254, 10
+  size: 16, 50
+  orig: 16, 50
+  offset: 0, 0
+  index: -1
+barrelRed_outline
+  rotate: false
+  xy: 156, 2
+  size: 24, 58
+  orig: 24, 58
+  offset: 0, 0
+  index: -1
+tankBeige
+  rotate: false
+  xy: 86, 62
+  size: 75, 70
+  orig: 75, 70
+  offset: 0, 0
+  index: -1
+tankBeige_outline
+  rotate: false
+  xy: 86, 134
+  size: 83, 78
+  orig: 83, 78
+  offset: 0, 0
+  index: -1
+tankBlack
+  rotate: false
+  xy: 163, 62
+  size: 75, 70
+  orig: 75, 70
+  offset: 0, 0
+  index: -1
+tankBlack_outline
+  rotate: false
+  xy: 171, 134
+  size: 83, 78
+  orig: 83, 78
+  offset: 0, 0
+  index: -1
+tankBlue
+  rotate: false
+  xy: 240, 62
+  size: 75, 70
+  orig: 75, 70
+  offset: 0, 0
+  index: -1
+tankBlue_outline
+  rotate: false
+  xy: 256, 134
+  size: 83, 78
+  orig: 83, 78
+  offset: 0, 0
+  index: -1
+tankGreen
+  rotate: false
+  xy: 317, 62
+  size: 75, 70
+  orig: 75, 70
+  offset: 0, 0
+  index: -1
+tankGreen_outline
+  rotate: false
+  xy: 341, 134
+  size: 83, 78
+  orig: 83, 78
+  offset: 0, 0
+  index: -1
+tankRed
+  rotate: false
+  xy: 394, 62
+  size: 75, 70
+  orig: 75, 70
+  offset: 0, 0
+  index: -1
+tankRed_outline
+  rotate: false
+  xy: 426, 134
+  size: 83, 78
+  orig: 83, 78
+  offset: 0, 0
+  index: -1
+tracksLarge
+  rotate: false
+  xy: 2, 108
+  size: 82, 104
+  orig: 82, 104
+  offset: 0, 0
+  index: -1
+tracksSmall
+  rotate: false
+  xy: 2, 2
+  size: 74, 104
+  orig: 74, 104
+  offset: 0, 0
+  index: -1
