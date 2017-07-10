@@ -17,8 +17,8 @@ public class TankBody extends Actor {
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
     }
 
-    public void draw(Batch batch, float alpha, float xPos, float yPos){
-        batch.draw(region, xPos, yPos, getOriginX(), getOriginY(), getWidth(), getHeight(),
+    public void draw(Batch batch, float alpha){
+        batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(),
                 getScaleX(), getScaleY(), getRotation());
     }
 }
