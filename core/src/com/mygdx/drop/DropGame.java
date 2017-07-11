@@ -7,6 +7,7 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
+import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -18,17 +19,19 @@ public class DropGame extends Game implements InputProcessor {
 
 
     private Stage stage;
+    private Tank tank;
 
 
     @Override
     public void create() {
         stage = new Stage();
-        Tank tank = new Tank();
+        tank = new Tank();
         stage.addActor(tank);
         stage.addListener(new InputListener(){
             @Override
             public boolean mouseMoved(InputEvent event, float xPos, float yPos){
-                System.out.println("Moving to " + xPos + " " + yPos);
+                Vector3 stageCoords = stage.getCamera().project(new Vector3(xPos, yPos, 0));
+                tank.handleMouseMove(stageCoords.x, stageCoords.y);
                 return true;
             }
         });
@@ -70,7 +73,6 @@ public class DropGame extends Game implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        System.out.println("Moving mouse");
         return true;
     }
 

@@ -15,6 +15,7 @@ public class TankTurret extends Actor{
 
     public TankTurret(){
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
+        setOrigin(getWidth()/2, 0);
     }
 
     @Override
