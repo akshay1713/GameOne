@@ -15,6 +15,10 @@ public class TankTurret extends Actor{
 
     public TankTurret(){
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
+        center();
+    }
+
+    public void center(){
         setOrigin(getWidth()/2, 0);
     }
 

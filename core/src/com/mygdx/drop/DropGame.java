@@ -7,7 +7,6 @@ import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
-import com.badlogic.gdx.math.Vector3;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -30,9 +29,16 @@ public class DropGame extends Game implements InputProcessor {
         stage.addListener(new InputListener(){
             @Override
             public boolean mouseMoved(InputEvent event, float xPos, float yPos){
-                Vector3 stageCoords = stage.getCamera().project(new Vector3(xPos, yPos, 0));
-                tank.handleMouseMove(stageCoords.x, stageCoords.y);
+                tank.handleMouseMove(xPos, yPos);
                 return true;
+            }
+            @Override
+            public void touchDragged(InputEvent event, float xPos, float yPos, int input){
+                tank.handleMouseMove(xPos, yPos);
+            }
+            @Override
+            public boolean touchDown(InputEvent event, float xPos, float yPos, int pointer, int button){
+               return true;
             }
         });
         Gdx.input.setInputProcessor(stage);
