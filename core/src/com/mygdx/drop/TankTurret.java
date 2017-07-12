@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
@@ -26,5 +27,9 @@ public class TankTurret extends Actor{
     public void draw(Batch batch, float alpha){
         batch.draw(region, getX(), getY(), getOriginX(), getOriginY(), getWidth(), getHeight(),
                 getScaleX(), getScaleY(), getRotation());
+    }
+
+    public Vector2 getOrigin() {
+        return localToParentCoordinates(new Vector2(getOriginX(), getOriginY()));
     }
 }

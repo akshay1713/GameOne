@@ -29,15 +29,16 @@ public class DropGame extends Game implements InputProcessor {
         stage.addListener(new InputListener(){
             @Override
             public boolean mouseMoved(InputEvent event, float xPos, float yPos){
-                tank.handleMouseMove(xPos, yPos);
+                tank.rotateTurret(xPos, yPos);
                 return true;
             }
             @Override
             public void touchDragged(InputEvent event, float xPos, float yPos, int input){
-                tank.handleMouseMove(xPos, yPos);
+                tank.rotateTurret(xPos, yPos);
             }
             @Override
             public boolean touchDown(InputEvent event, float xPos, float yPos, int pointer, int button){
+                tank.fire(xPos, yPos);
                return true;
             }
         });
