@@ -2,6 +2,7 @@ package com.mygdx.drop;
 
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Group;
+import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
 import com.badlogic.gdx.utils.Align;
 
 /**
@@ -37,5 +38,13 @@ public class Tank extends Group{
         float moveY = (rightCoords.y + leftCoords.y)/2 - body.getHeight()/2;
         bullet.moveBy(moveX, moveY);
         addActor(bullet);
+        MoveToAction fireAction = new MoveToAction();
+        fireAction.setPosition(1000,bullet.getY());
+        fireAction.setDuration(10f);
+        bullet.addAction(fireAction);
+    }
+
+    public void update(){
+
     }
 }
