@@ -28,20 +28,35 @@ public class Tank extends Group{
         turret.setRotation(xDiff.angle() - 90);
     }
 
-    public void fire(float xPos, float yPos){
-        TankBullet bullet = new TankBullet(turret.getHeight());
-        bullet.setRotation(turret.getRotation());
-        Vector2 leftCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topLeft), turret.getY(Align.topLeft)));
-        Vector2 rightCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topRight), turret.getY(Align.topRight)));
-        bullet.setOrigin(turret.getOrigin().x, turret.getOrigin().y);
-        float moveX = (leftCoords.x + rightCoords.x)/2  - body.getWidth()/2;
-        float moveY = (rightCoords.y + leftCoords.y)/2 - body.getHeight()/2;
-        bullet.moveBy(moveX, moveY);
+    public void fire(){
+        Vector2 bulletPosition = getBulletPosition();
+        Vector2 bulletOrigin = getBulletOrigin();
+        float bulletAngle = getBulletAngle();
+        TankBullet bullet = new TankBullet();
+        bullet.setRotation(bulletAngle);
+        bullet.moveBy(bulletPosition.x, bulletPosition.y);
+        bullet.setOrigin(bulletOrigin.x, bulletOrigin.y);
         addActor(bullet);
         MoveToAction fireAction = new MoveToAction();
         fireAction.setPosition(1000,bullet.getY());
         fireAction.setDuration(10f);
         bullet.addAction(fireAction);
+    }
+
+    private Vector2 getBulletPosition(){
+        Vector2 leftCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topLeft), turret.getY(Align.topLeft)));
+        Vector2 rightCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topRight), turret.getY(Align.topRight)));
+        float moveX = (leftCoords.x + rightCoords.x)/2  - body.getWidth()/2;
+        float moveY = (rightCoords.y + leftCoords.y)/2 - body.getHeight()/2;
+        return new Vector2(moveX, moveY);
+    }
+
+    private Vector2 getBulletOrigin(){
+        return turret.getOrigin();
+    }
+
+    private float getBulletAngle(){
+       return turret.getRotation();
     }
 
     public void update(){
