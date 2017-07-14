@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
@@ -17,17 +18,19 @@ public class TankBullet extends Actor{
     private TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("Spritesheet/tanksprite.atlas"));
     private TextureRegion region = textureAtlas.findRegion("bulletBeige");
 
-    public TankBullet(float height){
-        setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
-    }
-
     public TankBullet(){
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
-        center();
     }
 
-    public void center(){
-        setOrigin(getWidth()/2, 0);
+    public TankBullet(float angle, Vector2 origin, Vector2 position){
+        this();
+        setInitialParameters(angle, origin, position);
+    }
+
+    private void setInitialParameters(float angle, Vector2 origin, Vector2 position){
+       setRotation(angle);
+       setOrigin(origin.x, origin.y);
+       setPosition(position.x, position.y);
     }
 
     @Override

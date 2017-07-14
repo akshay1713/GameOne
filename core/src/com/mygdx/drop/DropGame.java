@@ -39,7 +39,7 @@ public class DropGame extends Game implements InputProcessor {
             }
             @Override
             public boolean touchDown(InputEvent event, float xPos, float yPos, int pointer, int button){
-                tank.fire(xPos, yPos);
+                tank.fire();
                return true;
             }
         });
