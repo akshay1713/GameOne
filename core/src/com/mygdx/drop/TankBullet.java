@@ -25,6 +25,10 @@ public class TankBullet extends Actor{
     public TankBullet(float angle, Vector2 origin, Vector2 position){
         this();
         setInitialParameters(angle, origin, position);
+        MoveToAction fireAction = new MoveToAction();
+        fireAction.setPosition(1000,getY());
+        fireAction.setDuration(10f);
+        addAction(fireAction);
     }
 
     private void setInitialParameters(float angle, Vector2 origin, Vector2 position){
