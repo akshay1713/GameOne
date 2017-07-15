@@ -18,17 +18,40 @@ public class TankBullet extends Actor{
     private TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("Spritesheet/tanksprite.atlas"));
     private TextureRegion region = textureAtlas.findRegion("bulletBeige");
 
+    Vector2 position = new Vector2();
+    Vector2 velocity = new Vector2();
+    Vector2 movement = new Vector2();
+    Vector2 destination = new Vector2();
+
     public TankBullet(){
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
     }
 
-    public TankBullet(float angle, Vector2 origin, Vector2 position){
+    public TankBullet(float angle, Vector2 origin, Vector2 position, Vector2 clickPoint){
         this();
         setInitialParameters(angle, origin, position);
+        System.out.println("RECEIVED " + clickPoint);
+
         MoveToAction fireAction = new MoveToAction();
-        fireAction.setPosition(1000,getY());
-        fireAction.setDuration(10f);
+        float currentX = getX();
+        float currentY = getY();
+        float newX = 2000;
+        float newY = newX*currentY/currentX;
+        if(signShouldChange(currentX, currentY)){
+            newX = -newX;
+            newY = -newY;
+        }
+        Vector2 local = parentToLocalCoordinates(clickPoint);
+        fireAction.setPosition(newX, newY);
+        fireAction.setDuration(2f);
         addAction(fireAction);
+    }
+
+    private boolean signShouldChange(float positionX, float positionY){
+        if(positionX < 0 || (positionY < 0 && positionX < 0)){
+            return true;
+        }
+       return false;
     }
 
     private void setInitialParameters(float angle, Vector2 origin, Vector2 position){
@@ -46,7 +69,6 @@ public class TankBullet extends Actor{
     @Override
     public void act(float delta){
         super.act(delta);
-        System.out.println("Acting");
         Array<Action> actions = getActions();
         if(actions.size == 0 ) {
            //Crossed border
@@ -54,6 +76,7 @@ public class TankBullet extends Actor{
             return;
         }
         MoveToAction moveToAction = (MoveToAction)getActions().get(0);
-        System.out.println( moveToAction.getX() + " " + getX());
+        Vector2 local = localToStageCoordinates(new Vector2(getX(), getY()));
+//        System.out.println( moveToAction.getX() + " " + getX() + " " + Gdx.graphics.getWidth() + " " + local.x);
     }
 }

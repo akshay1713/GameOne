@@ -27,11 +27,16 @@ public class Tank extends Group{
         turret.setRotation(xDiff.angle() - 90);
     }
 
-    public void fire(){
+    public void fire(float xPos, float yPos){
         Vector2 bulletMove = getBulletPosition();
         Vector2 bulletOrigin = getBulletOrigin();
+        Vector2 clickPoint = new Vector2(xPos, yPos);
         float bulletAngle = getBulletAngle();
-        TankBullet bullet = new TankBullet(bulletAngle, bulletOrigin, bulletMove);
+        Vector2 turretOrigin = turret.getOrigin();
+        System.out.println("COORDS Before " + turretOrigin + " " + clickPoint);
+//        clickPoint = stageToLocalCoordinates(clickPoint);
+        System.out.println("COORDS After " + turretOrigin + " " + clickPoint);
+        TankBullet bullet = new TankBullet(bulletAngle, bulletOrigin, bulletMove, clickPoint);
         addActor(bullet);
     }
 
