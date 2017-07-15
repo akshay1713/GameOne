@@ -27,31 +27,39 @@ public class TankBullet extends Actor{
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
     }
 
-    public TankBullet(float angle, Vector2 origin, Vector2 position, Vector2 clickPoint){
+    public TankBullet(float angle, Vector2 origin, Vector2 position){
         this();
         setInitialParameters(angle, origin, position);
-        System.out.println("RECEIVED " + clickPoint);
+        setFireAction();
+    }
 
+    private void setFireAction(){
         MoveToAction fireAction = new MoveToAction();
-        float currentX = getX();
-        float currentY = getY();
-        float newX = 2000;
-        float newY = newX*currentY/currentX;
-        if(signShouldChange(currentX, currentY)){
-            newX = -newX;
-            newY = -newY;
-        }
-        Vector2 local = parentToLocalCoordinates(clickPoint);
-        fireAction.setPosition(newX, newY);
+        Vector2 destination = getDestinationVector();
+        fireAction.setPosition(destination.x, destination.y);
         fireAction.setDuration(2f);
         addAction(fireAction);
+    }
+
+    private Vector2 getDestinationVector(){
+        Vector2 destination = new Vector2();
+        float currentX = getX();
+        float currentY = getY();
+        destination.x = 2000;
+        destination.y = destination.x * currentY/currentX;
+        destination = destination.rotate(15f);
+        if(signShouldChange(currentX, currentY)){
+            destination.x = -destination.x;
+            destination.y = -destination.y;
+        }
+        return destination;
     }
 
     private boolean signShouldChange(float positionX, float positionY){
         if(positionX < 0 || (positionY < 0 && positionX < 0)){
             return true;
         }
-       return false;
+        return false;
     }
 
     private void setInitialParameters(float angle, Vector2 origin, Vector2 position){
