@@ -18,11 +18,6 @@ public class TankBullet extends Actor{
     private TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("Spritesheet/tanksprite.atlas"));
     private TextureRegion region = textureAtlas.findRegion("bulletBeige");
 
-    Vector2 position = new Vector2();
-    Vector2 velocity = new Vector2();
-    Vector2 movement = new Vector2();
-    Vector2 destination = new Vector2();
-
     public TankBullet(){
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
     }
@@ -83,8 +78,5 @@ public class TankBullet extends Actor{
             this.remove();
             return;
         }
-        MoveToAction moveToAction = (MoveToAction)getActions().get(0);
-        Vector2 local = localToStageCoordinates(new Vector2(getX(), getY()));
-//        System.out.println( moveToAction.getX() + " " + getX() + " " + Gdx.graphics.getWidth() + " " + local.x);
     }
 }
