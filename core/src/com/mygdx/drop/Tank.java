@@ -37,7 +37,7 @@ public class Tank extends Group{
         Vector2 bulletOrigin = getBulletOrigin();
         float bulletAngle = getBulletAngle();
         TankBullet bullet = new TankBullet(bulletAngle, bulletOrigin, bulletMove);
-        addActor(bullet);
+        getParent().addActor(bullet);
     }
 
     public void moveForward(){
@@ -77,7 +77,7 @@ public class Tank extends Group{
         Vector2 rightCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topRight), turret.getY(Align.topRight)));
         float moveX = (leftCoords.x + rightCoords.x)/2  - body.getWidth()/2;
         float moveY = (rightCoords.y + leftCoords.y)/2 - body.getHeight()/2;
-        return new Vector2(moveX, moveY);
+        return localToStageCoordinates(new Vector2(moveX, moveY));
     }
 
     private Vector2 getBulletOrigin(){

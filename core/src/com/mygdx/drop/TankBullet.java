@@ -36,18 +36,22 @@ public class TankBullet extends Actor{
         addAction(fireAction);
     }
 
+    //TODO: What the hell are you doing here? Use a proper way to get the destination vector
     private Vector2 getDestinationVector(){
         Vector2 destination = new Vector2();
         float currentX = getX();
         float currentY = getY();
         destination.x = 2000;
         destination.y = destination.x * currentY/currentX;
-        destination = destination.rotate(15f);
         if(signShouldChange(currentX, currentY)){
             destination.x = -destination.x;
             destination.y = -destination.y;
         }
-        return destination;
+        destination = destination.rotate(60f);
+        if (destination.x < 0){
+            destination = destination.rotate(-15f);
+        }
+        return localToStageCoordinates(destination);
     }
 
     private boolean signShouldChange(float positionX, float positionY){
@@ -74,7 +78,7 @@ public class TankBullet extends Actor{
         super.act(delta);
         Array<Action> actions = getActions();
         if(actions.size == 0 ) {
-           //Crossed border
+           //The bullet has crossed the border, hehehe....
             this.remove();
             return;
         }
