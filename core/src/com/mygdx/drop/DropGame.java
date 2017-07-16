@@ -5,8 +5,6 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
-import com.badlogic.gdx.graphics.g2d.Sprite;
-import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,12 +12,9 @@ import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class DropGame extends Game implements InputProcessor {
 
-    private TextureAtlas textureAtlas;
-    private Sprite tankSprite;
-
-
     private Stage stage;
     private Tank tank;
+
 
 
     @Override
@@ -40,7 +35,35 @@ public class DropGame extends Game implements InputProcessor {
             @Override
             public boolean touchDown(InputEvent event, float xPos, float yPos, int pointer, int button){
                 tank.fire(xPos, yPos);
-               return true;
+                return true;
+            }
+
+            @Override
+            public boolean keyDown(InputEvent event, int keycode) {
+                if(Keys.isForwardKey(keycode)){
+                    tank.moveForward();
+                } else if (Keys.isBackwardKey(keycode)) {
+                    tank.moveBackward();
+                } else if (Keys.isLeftKey(keycode)){
+                    tank.moveLeft();
+                } else if (Keys.isRightKey(keycode)){
+                    tank.moveRight();
+                }
+                return super.keyDown(event, keycode);
+            }
+
+            @Override
+            public boolean keyUp(InputEvent event, int keycode) {
+                if(Keys.isForwardKey(keycode)){
+                    tank.stopMovingForward();
+                } else if (Keys.isBackwardKey(keycode)){
+                    tank.stopMovingBackward();
+                } else if (Keys.isLeftKey(keycode)){
+                    tank.stopMovingLeft();
+                } else if (Keys.isRightKey(keycode)){
+                    tank.stopMovingRight();
+                }
+                return super.keyDown(event, keycode);
             }
         });
         Gdx.input.setInputProcessor(stage);

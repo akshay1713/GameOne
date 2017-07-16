@@ -11,6 +11,11 @@ public class Tank extends Group{
     private TankBody body;
     private TankTurret turret;
 
+    private boolean movingForward = false;
+    private boolean movingBackward = false;
+    private boolean movingRight = false;
+    private boolean movingLeft = false;
+
     public Tank(){
         body = new TankBody();
         turret = new TankTurret();
@@ -35,6 +40,38 @@ public class Tank extends Group{
         addActor(bullet);
     }
 
+    public void moveForward(){
+        movingForward = true;
+    }
+
+    public void stopMovingForward(){
+        movingForward = false;
+    }
+
+    public void moveBackward() {
+        movingBackward = true;
+    }
+
+    public void stopMovingBackward(){
+        movingBackward = false;
+    }
+
+    public void moveRight() {
+        movingRight = true;
+    }
+
+    public void stopMovingRight(){
+        movingRight = false;
+    }
+
+    public void moveLeft() {
+        movingLeft = true;
+    }
+
+    public void stopMovingLeft(){
+        movingLeft = false;
+    }
+
     private Vector2 getBulletPosition(){
         Vector2 leftCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topLeft), turret.getY(Align.topLeft)));
         Vector2 rightCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topRight), turret.getY(Align.topRight)));
@@ -51,7 +88,36 @@ public class Tank extends Group{
        return turret.getRotation();
     }
 
-    public void update(){
-
+    private void updateY(){
+        if(movingForward && !movingBackward){
+            setY(getY() + 5);
+        } else if (movingBackward && !movingForward){
+            setY(getY() - 5);
+        }
     }
+
+    private void updateX(){
+       if(movingRight && !movingLeft){
+           setX(getX() + 5);
+       } else if (movingLeft && !movingRight){
+           setX(getX() - 5);
+       }
+    }
+
+    private void updateAngle(){
+        if(movingRight && !movingLeft){
+            body.setRotation(90f);
+        } else if (movingLeft && !movingRight){
+            body.setRotation(180f);
+        }
+    }
+
+    @Override
+    public void act(float delta){
+        super.act(delta);
+        updateY();
+        updateX();
+        updateAngle();
+    }
+
 }
