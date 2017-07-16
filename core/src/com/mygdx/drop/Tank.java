@@ -108,7 +108,11 @@ public class Tank extends Group{
         if(movingRight && !movingLeft){
             body.setRotation(90f);
         } else if (movingLeft && !movingRight){
-            body.setRotation(180f);
+            body.setRotation(270);
+        } else if (movingForward && !movingBackward) {
+            body.setRotation(0f);
+        } else if (movingBackward && !movingForward) {
+            body.setRotation(180);
         }
     }
 
