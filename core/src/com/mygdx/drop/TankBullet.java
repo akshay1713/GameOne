@@ -20,6 +20,7 @@ public class TankBullet extends Actor{
 
     public TankBullet(){
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
+        setScale(0.5f);
     }
 
     public TankBullet(float angle, Vector2 origin, Vector2 position){

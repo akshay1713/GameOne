@@ -23,6 +23,7 @@ public class Tank extends Group{
         addActor(body);
         addActor(turret);
         setPosition(400, 300);
+        setScale(0.5f);
     }
 
     public void rotateTurret(float screenX, float screenY) {
@@ -75,8 +76,8 @@ public class Tank extends Group{
     private Vector2 getBulletPosition(){
         Vector2 leftCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topLeft), turret.getY(Align.topLeft)));
         Vector2 rightCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topRight), turret.getY(Align.topRight)));
-        float moveX = (leftCoords.x + rightCoords.x)/2  - body.getWidth()/2;
-        float moveY = (rightCoords.y + leftCoords.y)/2 - body.getHeight()/2;
+        float moveX = (leftCoords.x + rightCoords.x)/2  - body.getWidth();
+        float moveY = (rightCoords.y + leftCoords.y)/2 - body.getHeight();
         return localToStageCoordinates(new Vector2(moveX, moveY));
     }
 
