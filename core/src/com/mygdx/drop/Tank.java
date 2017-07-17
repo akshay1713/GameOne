@@ -37,7 +37,8 @@ public class Tank extends Group{
         Vector2 bulletMove = getBulletPosition();
         Vector2 bulletOrigin = getBulletOrigin();
         float bulletAngle = getBulletAngle();
-        TankBullet bullet = new TankBullet(bulletAngle, bulletOrigin, bulletMove);
+        Vector2 clickVector = new Vector2(xPos, yPos);
+        TankBullet bullet = new TankBullet(bulletAngle, bulletOrigin, bulletMove, clickVector);
         getParent().addActor(bullet);
     }
 
@@ -86,7 +87,7 @@ public class Tank extends Group{
     }
 
     private float getBulletAngle(){
-       return turret.getRotation();
+        return turret.getRotation();
     }
 
     private void updateY(){

@@ -5,10 +5,8 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Action;
 import com.badlogic.gdx.scenes.scene2d.Actor;
 import com.badlogic.gdx.scenes.scene2d.actions.MoveToAction;
-import com.badlogic.gdx.utils.Array;
 
 
 /**
@@ -17,16 +15,23 @@ import com.badlogic.gdx.utils.Array;
 public class TankBullet extends Actor{
     private TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("Spritesheet/tanksprite.atlas"));
     private TextureRegion region = textureAtlas.findRegion("bulletBeige");
+    private  float angle;
 
     public TankBullet(){
         setBounds(0,0,region.getRegionWidth(),region.getRegionHeight());
         setScale(0.5f);
     }
 
-    public TankBullet(float angle, Vector2 origin, Vector2 position){
+    public TankBullet(float angle, Vector2 origin, Vector2 position, Vector2 clickVector){
         this();
         setInitialParameters(angle, origin, position);
-        setFireAction();
+        setAngle(clickVector);
+    }
+
+    private void setAngle(Vector2 clickVector) {
+        Vector2 originInStage = localToStageCoordinates(new Vector2(getOriginX(), getOriginY()));
+        Vector2 xDiff = clickVector.sub(originInStage);
+        this.angle = xDiff.angle();
     }
 
     private void setFireAction(){
@@ -63,9 +68,15 @@ public class TankBullet extends Actor{
     }
 
     private void setInitialParameters(float angle, Vector2 origin, Vector2 position){
-       setRotation(angle);
+//        origin = stageToLocalCoordinates(origin);
        setOrigin(origin.x, origin.y);
        setPosition(position.x, position.y);
+       setRotation(angle);
+    }
+
+    private int getQuadrant(float angle){
+        int angle2 = (int)angle;
+        return (angle2/90)%4+1;
     }
 
     @Override
@@ -77,11 +88,29 @@ public class TankBullet extends Actor{
     @Override
     public void act(float delta){
         super.act(delta);
-        Array<Action> actions = getActions();
-        if(actions.size == 0 ) {
-           //The bullet has crossed the border, hehehe....
-            this.remove();
-            return;
+        Vector2 current = new Vector2(getX(), getY());
+        int quadrant = getQuadrant(angle);
+        double quadrantAngle = angle % 90;
+        if (quadrant == 2 || quadrant == 4){
+            quadrantAngle = 90 - quadrantAngle;
         }
+        float deltaDistance = 15;
+        float deltaX = (float) Math.cos(Math.toRadians(quadrantAngle)) * deltaDistance;
+        float deltaY = (float) Math.sin(Math.toRadians(quadrantAngle)) * deltaDistance;
+        float x2 = current.x + deltaX;
+        float y2 = current.y + deltaY;
+        if (quadrant == 2 || quadrant == 3){
+            x2 = current.x - deltaX;
+        }
+        if (quadrant == 3 || quadrant == 4){
+            y2 = current.y - deltaY;
+        }
+        setPosition(x2, y2);
+//        Array<Action> actions = getActions();
+//        if(actions.size == 0 ) {
+//           //The bullet has crossed the border, hehehe....
+//            this.remove();
+//            return;
+//        }
     }
 }
