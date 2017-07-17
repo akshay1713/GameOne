@@ -5,6 +5,11 @@ import com.badlogic.gdx.Game;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
+import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.maps.tiled.TiledMap;
+import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
+import com.badlogic.gdx.maps.tiled.TmxMapLoader;
+import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -14,12 +19,26 @@ public class DropGame extends Game implements InputProcessor {
 
     private Stage stage;
     private Tank tank;
+    private TiledMapRenderer mapRenderer;
+    private TiledMap map;
+    private OrthographicCamera mainCamera;
 
 
 
     @Override
     public void create() {
+        float width = Gdx.graphics.getWidth();
+        float height = Gdx.graphics.getHeight();
+
+
         stage = new Stage();
+
+        mainCamera = (OrthographicCamera) stage.getCamera();
+        mainCamera.setToOrtho(false, width, height);
+        mainCamera.update();
+        map = new TmxMapLoader().load("Map/TW.tmx");
+        mapRenderer = new OrthogonalTiledMapRenderer(map);
+
         tank = new Tank();
         stage.addActor(tank);
         stage.addListener(new InputListener(){
@@ -44,7 +63,7 @@ public class DropGame extends Game implements InputProcessor {
                     tank.moveForward();
                 } else if (Keys.isBackwardKey(keycode)) {
                     tank.moveBackward();
-                } else if (Keys.isLeftKey(keycode)){
+                } else if (Keys.isLeftKey(keycode)) {
                     tank.moveLeft();
                 } else if (Keys.isRightKey(keycode)){
                     tank.moveRight();
@@ -70,20 +89,44 @@ public class DropGame extends Game implements InputProcessor {
     }
 
     @Override
+    public void dispose() {
+    }
+
+    @Override
+    public void render() {
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
+        Actions.removeActor();
+        stage.act();
+        mainCamera.update();
+        mapRenderer.setView(mainCamera);
+        mapRenderer.render();
+        stage.draw();
+    }
+
+    @Override
+    public void resize(int width, int height) {
+    }
+
+    @Override
+    public void pause() {
+    }
+
+    @Override
+    public void resume() {
+    }
+
+    @Override
     public boolean keyDown(int keycode) {
-        System.out.print("keyDown");
         return false;
     }
 
     @Override
     public boolean keyUp(int keycode) {
-        System.out.print("keyUp");
         return false;
     }
 
     @Override
     public boolean keyTyped(char character) {
-        System.out.print("keyTyped");
         return false;
     }
 
@@ -104,36 +147,12 @@ public class DropGame extends Game implements InputProcessor {
 
     @Override
     public boolean mouseMoved(int screenX, int screenY) {
-        return true;
+        return false;
     }
 
     @Override
     public boolean scrolled(int amount) {
         return false;
-    }
-
-    @Override
-    public void dispose() {
-    }
-
-    @Override
-    public void render() {
-        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Actions.removeActor();
-        stage.act();
-        stage.draw();
-    }
-
-    @Override
-    public void resize(int width, int height) {
-    }
-
-    @Override
-    public void pause() {
-    }
-
-    @Override
-    public void resume() {
     }
 }
 
