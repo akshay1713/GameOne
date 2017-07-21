@@ -6,14 +6,16 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.InputProcessor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
+import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.*;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
-import com.badlogic.gdx.scenes.scene2d.actions.Actions;
 
 public class DropGame extends Game implements InputProcessor {
 
@@ -23,12 +25,24 @@ public class DropGame extends Game implements InputProcessor {
     private TiledMap map;
     private OrthographicCamera mainCamera;
 
+    private ShapeRenderer debugRenderer;
+
+    private static boolean debug = false;
+
+    private World world;
+    private Box2DDebugRenderer b2dr;
+
+
 
 
     @Override
     public void create() {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
+
+        world = new World(new Vector2(0, -100f), true);
+        b2dr = new Box2DDebugRenderer();
+
 
 
         stage = new Stage();
@@ -37,7 +51,10 @@ public class DropGame extends Game implements InputProcessor {
         mainCamera.setToOrtho(false, width, height);
         mainCamera.update();
         map = new TmxMapLoader().load("Map/TW.tmx");
+        initBox2dWorld();
         mapRenderer = new OrthogonalTiledMapRenderer(map);
+
+        debugRenderer = new ShapeRenderer();
 
         tank = new Tank();
         stage.addActor(tank);
@@ -88,21 +105,56 @@ public class DropGame extends Game implements InputProcessor {
         Gdx.input.setInputProcessor(stage);
     }
 
+    private void initBox2dWorld(){
+
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(new Vector2(600, 240));
+        bodyDef.type = BodyDef.BodyType.StaticBody;
+
+        Body body = world.createBody(bodyDef);
+
+        PolygonShape shape = new PolygonShape();
+        shape.setAsBox(100, 100);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        body.createFixture(fixtureDef);
+
+        bodyDef.position.set(700, 700);
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bodyDef);
+        shape.setAsBox(10, 10);
+        fixtureDef.shape = shape;
+        body.createFixture(fixtureDef);
+        shape.setRadius(5f);
+        fixtureDef.shape = shape;
+        body.createFixture(fixtureDef);
+
+        MapBodyManager mapBodyManager = new MapBodyManager(world, 1f, "material.json");
+        mapBodyManager.createPhysics(map, "Physics");
+    }
+
+
     @Override
     public void dispose() {
     }
 
     @Override
     public void render() {
+        float delta = Gdx.graphics.getDeltaTime();
         Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT);
-        Actions.removeActor();
+        world.step(delta, 6, 2);
         stage.act();
         mainCamera.update();
         mapRenderer.setView(mainCamera);
         mapRenderer.render();
         stage.draw();
+        b2dr.render(world, mainCamera.combined);
+
+        if (debug) renderDebug();
     }
 
+    private void renderDebug () {
+    }
     @Override
     public void resize(int width, int height) {
     }
