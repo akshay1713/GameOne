@@ -37,7 +37,7 @@ public class DropGame extends Game implements InputProcessor {
         float width = Gdx.graphics.getWidth();
         float height = Gdx.graphics.getHeight();
 
-        world = new World(new Vector2(0, -100f), true);
+        world = new World(new Vector2(0,0f), true);
         b2dr = new Box2DDebugRenderer();
 
 

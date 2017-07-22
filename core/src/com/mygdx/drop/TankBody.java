@@ -4,12 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
 /**
  * Created by akshaysingh on 09/07/17.
  */
-public class TankBody extends Actor {
+public class TankBody extends PhysicsActor {
     private TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("Spritesheet/tanksprite.atlas"));
     private TextureRegion region = textureAtlas.findRegion("tankBeige");
 

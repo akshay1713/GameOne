@@ -5,13 +5,12 @@ import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.TextureAtlas;
 import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Actor;
 
 
 /**
  * Created by akshaysingh on 11/07/17.
  */
-public class TankBullet extends Actor{
+public class TankBullet extends PhysicsActor{
     private TextureAtlas textureAtlas = new TextureAtlas(Gdx.files.internal("Spritesheet/tanksprite.atlas"));
     private TextureRegion region = textureAtlas.findRegion("bulletBeige");
     private float quadrantAngle;
