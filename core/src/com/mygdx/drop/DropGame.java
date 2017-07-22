@@ -32,9 +32,6 @@ public class DropGame extends Game implements InputProcessor {
     private World world;
     private Box2DDebugRenderer b2dr;
 
-
-
-
     @Override
     public void create() {
         float width = Gdx.graphics.getWidth();
@@ -56,6 +53,8 @@ public class DropGame extends Game implements InputProcessor {
 
         debugRenderer = new ShapeRenderer();
 
+//        creatBox2DBodies();
+        
         tank = new Tank();
         stage.addActor(tank);
         stage.addListener(new InputListener(){
@@ -107,30 +106,8 @@ public class DropGame extends Game implements InputProcessor {
 
     private void initBox2dWorld(){
 
-        BodyDef bodyDef = new BodyDef();
-        bodyDef.position.set(new Vector2(600, 240));
-        bodyDef.type = BodyDef.BodyType.StaticBody;
-
-        Body body = world.createBody(bodyDef);
-
-        PolygonShape shape = new PolygonShape();
-        shape.setAsBox(100, 100);
-        FixtureDef fixtureDef = new FixtureDef();
-        fixtureDef.shape = shape;
-        body.createFixture(fixtureDef);
-
-        bodyDef.position.set(700, 700);
-        bodyDef.type = BodyDef.BodyType.DynamicBody;
-        body = world.createBody(bodyDef);
-        shape.setAsBox(10, 10);
-        fixtureDef.shape = shape;
-        body.createFixture(fixtureDef);
-        shape.setRadius(5f);
-        fixtureDef.shape = shape;
-        body.createFixture(fixtureDef);
-
-        MapBodyManager mapBodyManager = new MapBodyManager(world, 1f, "material.json");
-        mapBodyManager.createPhysics(map, "Physics");
+        MapBodyManager mapBodyManager = new MapBodyManager(world, 1f, null);
+        mapBodyManager.createPhysics(map, "physics2");
     }
 
 
