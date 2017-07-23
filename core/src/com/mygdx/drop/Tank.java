@@ -1,13 +1,16 @@
 package com.mygdx.drop;
 
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.physics.box2d.BodyDef;
+import com.badlogic.gdx.physics.box2d.FixtureDef;
+import com.badlogic.gdx.physics.box2d.PolygonShape;
 import com.badlogic.gdx.utils.Align;
 
 /**
  * Created by akshaysingh on 09/07/17.
  */
 public class Tank extends PhysicsGroup{
-    private TankBody body;
+    private TankBody tankBody;
     private TankTurret turret;
 
     private boolean movingForward = false;
@@ -16,17 +19,27 @@ public class Tank extends PhysicsGroup{
     private boolean movingLeft = false;
 
     public Tank(){
-        body = new TankBody();
+        tankBody = new TankBody();
         turret = new TankTurret();
-        turret.setPosition(body.getWidth()/2 - turret.getWidth()/2, body.getHeight()/2);
-        addActor(body);
+        turret.setPosition(tankBody.getWidth()/2 - turret.getWidth()/2, tankBody.getHeight()/2);
+        addActor(tankBody);
         addActor(turret);
         setPosition(400, 300);
         setScale(0.5f);
     }
 
     public void setBox2d(){
-        body.setBox2D();
+        BodyDef bodyDef = new BodyDef();
+        bodyDef.position.set(localToStageCoordinates(new Vector2(tankBody.getOriginX() + tankBody.getWidth()/2, tankBody.getOriginY() + tankBody.getHeight()/2)));
+        bodyDef.type = BodyDef.BodyType.DynamicBody;
+        body = world.createBody(bodyDef);
+        PolygonShape shape = new PolygonShape();
+        System.out.println(new Vector2(getWidth(), getHeight()));
+        shape.setAsBox(tankBody.getWidth()/4, tankBody.getHeight()/4);
+        FixtureDef fixtureDef = new FixtureDef();
+        fixtureDef.shape = shape;
+        fixtureDef.density = 10f;
+        body.createFixture(fixtureDef);
     }
 
     public void rotateTurret(float screenX, float screenY) {
@@ -80,8 +93,8 @@ public class Tank extends PhysicsGroup{
     private Vector2 getBulletPosition(){
         Vector2 leftCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topLeft), turret.getY(Align.topLeft)));
         Vector2 rightCoords = turret.localToParentCoordinates(new Vector2(turret.getX(Align.topRight), turret.getY(Align.topRight)));
-        float moveX = (leftCoords.x + rightCoords.x)/2  - body.getWidth();
-        float moveY = (rightCoords.y + leftCoords.y)/2 - body.getHeight();
+        float moveX = (leftCoords.x + rightCoords.x)/2  - tankBody.getWidth();
+        float moveY = (rightCoords.y + leftCoords.y)/2 - tankBody.getHeight();
         return localToStageCoordinates(new Vector2(moveX, moveY));
     }
 
@@ -94,31 +107,45 @@ public class Tank extends PhysicsGroup{
     }
 
     private void updateY(){
+        Vector2 current = body.getPosition();
+        float currentY = current.y;
         if(movingForward && !movingBackward){
-            setY(getY() + 5);
+            currentY += 5;
         } else if (movingBackward && !movingForward){
-            setY(getY() - 5);
+            currentY -=5;
+        } else {
+            return;
         }
+        float currentX = current.x;
+        body.setTransform(new Vector2(currentX, currentY), 0);
     }
 
     private void updateX(){
-       if(movingRight && !movingLeft){
-           setX(getX() + 5);
-       } else if (movingLeft && !movingRight){
-           setX(getX() - 5);
-       }
+        Vector2 current = body.getPosition();
+        float currentX = current.x;
+        if(movingRight && !movingLeft){
+            currentX += 5;
+        } else if (movingLeft && !movingRight){
+            currentX -= 5;
+        } else {
+            return;
+        }
+        float currentY = current.y;
+        body.setTransform(new Vector2(currentX, currentY), 0);
     }
 
     private void updateAngle(){
+        float angle = body.getAngle();
         if(movingRight && !movingLeft){
-            body.setRotation(90f);
+            tankBody.setRotation(90f);
         } else if (movingLeft && !movingRight){
-            body.setRotation(270);
+            tankBody.setRotation(270);
         } else if (movingForward && !movingBackward) {
-            body.setRotation(0f);
+            tankBody.setRotation(0f);
         } else if (movingBackward && !movingForward) {
-            body.setRotation(180);
+            tankBody.setRotation(180);
         }
+        body.setTransform(body.getPosition(), angle);
     }
 
     @Override
@@ -127,6 +154,8 @@ public class Tank extends PhysicsGroup{
         updateY();
         updateX();
         updateAngle();
+        Vector2 current = body.getPosition();
+        setPosition(current.x - tankBody.getWidth()/4, current.y - tankBody.getHeight()/4);
     }
 
 }

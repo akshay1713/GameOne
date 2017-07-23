@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="40" height="25" tilewidth="32" tileheight="32" nextobjectid="17">
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="40" height="25" tilewidth="32" tileheight="32" nextobjectid="20">
  <tileset firstgid="1" source="grass.tsx"/>
  <tileset firstgid="17" source="treeSmall.tsx"/>
  <layer name="land" width="40" height="25">
@@ -32,9 +32,7 @@
 </data>
  </layer>
  <objectgroup name="physics2">
-  <object id="16" x="171" y="223">
-   <polyline points="0,0 0,-6 7,-11 12,-12 16,-14 19,-19 26,-24 35,-24 43,-20 49,-20 61,-17 67,-9 69,-1 75,10 76,25 72,28 76,40 67,54 53,61 47,59 39,65 26,67 16,58 7,55 1,45 1,39 -7,34 -10,23 -8,12 1,7 1,1"/>
-  </object>
+  <object id="19" x="161" y="199" width="86" height="88"/>
  </objectgroup>
  <layer name="physics" width="40" height="25">
   <data encoding="csv">

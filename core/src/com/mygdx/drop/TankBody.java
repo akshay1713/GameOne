@@ -42,6 +42,6 @@ public class TankBody extends PhysicsActor {
 
     @Override
     public void act(float delta){
-        body.setTransform(localToStageCoordinates(new Vector2(getOriginX(), getOriginY())), 0);
+        super.act(delta);
     }
 }

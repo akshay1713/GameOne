@@ -41,6 +41,7 @@ public class DropGame extends Game implements InputProcessor {
 
         world = new World(new Vector2(0,0f), true);
         PhysicsActor.setWorld(world);
+        PhysicsGroup.setWorld(world);
         b2dr = new Box2DDebugRenderer();
 
 
