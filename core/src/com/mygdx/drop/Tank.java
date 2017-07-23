@@ -1,13 +1,12 @@
 package com.mygdx.drop;
 
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.scenes.scene2d.Group;
 import com.badlogic.gdx.utils.Align;
 
 /**
  * Created by akshaysingh on 09/07/17.
  */
-public class Tank extends Group{
+public class Tank extends PhysicsGroup{
     private TankBody body;
     private TankTurret turret;
 
@@ -24,6 +23,10 @@ public class Tank extends Group{
         addActor(turret);
         setPosition(400, 300);
         setScale(0.5f);
+    }
+
+    public void setBox2d(){
+        body.setBox2D();
     }
 
     public void rotateTurret(float screenX, float screenY) {
