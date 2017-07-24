@@ -32,6 +32,7 @@ public class Tank extends PhysicsGroup{
         BodyDef bodyDef = new BodyDef();
         bodyDef.position.set(localToStageCoordinates(new Vector2(tankBody.getOriginX() + tankBody.getWidth()/2, tankBody.getOriginY() + tankBody.getHeight()/2)));
         bodyDef.type = BodyDef.BodyType.DynamicBody;
+        bodyDef.fixedRotation = true;
         body = world.createBody(bodyDef);
         PolygonShape shape = new PolygonShape();
         System.out.println(new Vector2(getWidth(), getHeight()));
@@ -56,6 +57,7 @@ public class Tank extends PhysicsGroup{
         Vector2 clickVector = new Vector2(xPos, yPos);
         TankBullet bullet = new TankBullet(bulletAngle, bulletOrigin, bulletMove, clickVector);
         getParent().addActor(bullet);
+        bullet.setBox2d();
     }
 
     public void moveForward(){
@@ -106,34 +108,6 @@ public class Tank extends PhysicsGroup{
         return turret.getRotation();
     }
 
-    private void updateY(){
-        Vector2 current = body.getPosition();
-        float currentY = current.y;
-        if(movingForward && !movingBackward){
-            currentY += 5;
-        } else if (movingBackward && !movingForward){
-            currentY -=5;
-        } else {
-            return;
-        }
-        float currentX = current.x;
-        body.setTransform(new Vector2(currentX, currentY), 0);
-    }
-
-    private void updateX(){
-        Vector2 current = body.getPosition();
-        float currentX = current.x;
-        if(movingRight && !movingLeft){
-            currentX += 5;
-        } else if (movingLeft && !movingRight){
-            currentX -= 5;
-        } else {
-            return;
-        }
-        float currentY = current.y;
-        body.setTransform(new Vector2(currentX, currentY), 0);
-    }
-
     private void updateAngle(){
         float angle = body.getAngle();
         if(movingRight && !movingLeft){
@@ -147,15 +121,44 @@ public class Tank extends PhysicsGroup{
         }
         body.setTransform(body.getPosition(), angle);
     }
+    private boolean updateY(){
+        Vector2 current = body.getPosition();
+        boolean updated = false;
+        if(movingForward){
+            body.applyLinearImpulse(0f, 500000f, current.x, current.y, true);
+            updated = true;
+        } else if (movingBackward){
+            body.applyLinearImpulse(0f, -500000f, current.x, current.y, true);
+            updated = true;
+        }
+        return updated;
+    }
+
+    private boolean updateX(){
+        Vector2 current = body.getPosition();
+        boolean updated = false;
+        if(movingRight && !movingLeft){
+            body.applyLinearImpulse(500000f, 0f, current.x, current.y, true);
+            updated = true;
+        } else if (movingLeft && !movingRight){
+            body.applyLinearImpulse(-500000f, 0f, current.x, current.y, true);
+            updated = true;
+        }
+        return updated;
+    }
 
     @Override
     public void act(float delta){
         super.act(delta);
-        updateY();
-        updateX();
-        updateAngle();
-        Vector2 current = body.getPosition();
-        setPosition(current.x - tankBody.getWidth()/4, current.y - tankBody.getHeight()/4);
+        boolean newY = updateY();
+        boolean newX = updateX();
+        body.setAngularVelocity(0);
+        if (!newX && !newY){
+            body.setLinearVelocity(new Vector2(0,0));
+            return;
+        }
+        Vector2 updatedPosition = body.getPosition();
+        setPosition(updatedPosition.x - tankBody.getWidth()/4, updatedPosition.y - tankBody.getHeight()/4);
     }
 
 }

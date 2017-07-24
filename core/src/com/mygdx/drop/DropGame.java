@@ -9,12 +9,11 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.glutils.ShapeRenderer;
 import com.badlogic.gdx.maps.tiled.TiledMap;
 import com.badlogic.gdx.maps.tiled.TiledMapRenderer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer;
-import com.badlogic.gdx.maps.tiled.TiledMapTileLayer.Cell;
 import com.badlogic.gdx.maps.tiled.TmxMapLoader;
 import com.badlogic.gdx.maps.tiled.renderers.OrthogonalTiledMapRenderer;
 import com.badlogic.gdx.math.Vector2;
-import com.badlogic.gdx.physics.box2d.*;
+import com.badlogic.gdx.physics.box2d.Box2DDebugRenderer;
+import com.badlogic.gdx.physics.box2d.World;
 import com.badlogic.gdx.scenes.scene2d.InputEvent;
 import com.badlogic.gdx.scenes.scene2d.InputListener;
 import com.badlogic.gdx.scenes.scene2d.Stage;
@@ -109,45 +108,9 @@ public class DropGame extends Game implements InputProcessor {
         Gdx.input.setInputProcessor(stage);
     }
 
-    private void creatBox2DBodies() {
-        TiledMapTileLayer physics = (TiledMapTileLayer) map.getLayers().get("Physics");
-        System.out.println("Layers are " + map.getLayers());
-        float tileSize = physics.getTileWidth();
-        BodyDef bodyDef = new BodyDef();
-        for (int row = 0 ; row < physics.getHeight(); row++){
-            for (int col = 0; col < physics.getWidth(); col++){
-                Cell cell = physics.getCell(col, row);
-                if(cell == null) continue;
-                if(cell.getTile() == null) continue;
-
-                bodyDef.type = BodyDef.BodyType.StaticBody;
-                bodyDef.position.set(
-                    col + 0.5f * tileSize,
-                    row + 0.5f * tileSize
-                );
-
-                FixtureDef fixtureDef = new FixtureDef();
-
-                ChainShape chainShape = new ChainShape();
-                Vector2[] vector2s = new Vector2[4];
-                vector2s[0] = new Vector2(-tileSize, -tileSize);
-                vector2s[1] = new Vector2(-tileSize, tileSize);
-                vector2s[2] = new Vector2(tileSize, -tileSize);
-                vector2s[3] = new Vector2(tileSize, tileSize);
-                chainShape.createChain(vector2s);
-
-                fixtureDef.friction = 0;
-                fixtureDef.shape = chainShape;
-                world.createBody(bodyDef).createFixture(fixtureDef);
-            }
-        }
-    }
-
     private void initBox2dWorld(){
-
-
         MapBodyManager mapBodyManager = new MapBodyManager(world, 1f, null);
-        mapBodyManager.createPhysics(map, "physics2");
+        mapBodyManager.createPhysics(map, "physics");
     }
 
 
