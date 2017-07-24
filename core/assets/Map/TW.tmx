@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="40" height="25" tilewidth="32" tileheight="32" nextobjectid="20">
+<map version="1.0" tiledversion="1.0.2" orientation="orthogonal" renderorder="right-down" width="40" height="25" tilewidth="32" tileheight="32" nextobjectid="25">
  <tileset firstgid="1" source="grass.tsx"/>
  <tileset firstgid="17" source="treeSmall.tsx"/>
  <layer name="land" width="40" height="25">
@@ -31,10 +31,13 @@
 12,12,12,12,12,12,10,11,12,12,12,12,12,12,12,12,12,12,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16,16
 </data>
  </layer>
- <objectgroup name="physics2">
-  <object id="19" x="161" y="199" width="86" height="88"/>
+ <objectgroup name="physics">
+  <object id="20" x="163" y="204" width="85" height="82"/>
+  <object id="21" x="705" y="198" width="86" height="91"/>
+  <object id="22" x="449" y="424" width="86" height="87"/>
+  <object id="24" x="708" y="588" width="81" height="83"/>
  </objectgroup>
- <layer name="physics" width="40" height="25">
+ <layer name="obstacles" width="40" height="25">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
